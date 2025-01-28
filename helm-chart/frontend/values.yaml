@@ -1,0 +1,9 @@
+image:
+  repository: frontend
+  greenTag: green
+  blueTag: blue
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80

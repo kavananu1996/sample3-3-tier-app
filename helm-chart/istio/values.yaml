@@ -1,0 +1,37 @@
+gateway:
+  name: frontend-gateway
+  selector:
+    istio: ingressgateway
+  port:
+    number: 80
+    name: http
+    protocol: HTTP
+  hosts:
+    - "*"
+
+virtualService:
+  name: frontend
+  hosts:
+    - frontend
+  gateways:
+    - "{{ .Values.gateway.name }}"
+  routing:
+    match:
+      prefix: /
+    routes:
+      - subset: green
+        weight: 50
+      - subset: blue
+        weight: 50
+
+destinationRule:
+  name: frontend
+  host: frontend
+  subsets:
+    - name: green
+      labels:
+        app: frontend-green
+    - name: blue
+      labels:
+        app: frontend-blue
+

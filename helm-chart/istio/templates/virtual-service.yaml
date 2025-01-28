@@ -1,0 +1,25 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ .Values.virtualService.name }}
+spec:
+  hosts:
+    {{- range .Values.virtualService.hosts }}
+    - {{ . }}
+    {{- end }}
+  gateways:
+    {{- range .Values.virtualService.gateways }}
+    - {{ . }}
+    {{- end }}
+  http:
+    - name: "blue-green-routing"
+      match:
+        - uri:
+            prefix: {{ .Values.virtualService.routing.match.prefix }}
+      route:
+        {{- range .Values.virtualService.routing.routes }}
+        - destination:
+            host: {{ $.Values.destinationRule.host }}
+            subset: {{ .subset }}
+          weight: {{ .weight }}
+        {{- end }}

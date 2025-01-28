@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-green
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: backend-green
+  template:
+    metadata:
+      labels:
+        app: backend-green
+    spec:
+      containers:
+        - name: backend-green
+          image: "{{ .Values.image.repository }}:{{ .Values.image.greenTag }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATA_MONGODB_URI
+              value: "{{ .Values.database.uri }}"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-blue
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: backend-blue
+  template:
+    metadata:
+      labels:
+        app: backend-blue
+    spec:
+      containers:
+        - name: backend-blue
+          image: "{{ .Values.image.repository }}:{{ .Values.image.blueTag }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATA_MONGODB_URI
+              value: "{{ .Values.database.uri }}"
+
