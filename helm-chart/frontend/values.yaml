@@ -1,5 +1,5 @@
 image:
-  repository: frontend
+  repository: kavananu1997/frontend
   greenTag: green
   blueTag: blue
   pullPolicy: Always
